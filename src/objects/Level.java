@@ -199,6 +199,8 @@ public class Level {
 	 *            the pixel size of a tile. 32 is perferable.
 	 */
 	BufferedImage img;
+
+	private boolean StartUp=true;
 	public void populateMap(String fileName, int tileSize) {
 		try {
 			String parser = " ";
@@ -330,6 +332,7 @@ public class Level {
 	public void draw(Graphics2D g2) {
 		int currentPosition;
 		// cache the tile background in an image so tiles don't need to be drawn again and again redundantly.
+		if(StartUp){
 		Graphics2D g = img.createGraphics();
 		for (int r = 0; r < this.map.length; r++) {
 			for (int c = 0; c < this.map[r].length; c++) {
@@ -338,6 +341,8 @@ public class Level {
 			}
 		}
 		g.dispose();
+		StartUp=false;
+		}
 		// draw cached tiles
 		g2.drawImage(img, 0, 0, img.getWidth(), img.getHeight(), null);
 	}
@@ -384,6 +389,9 @@ public class Level {
 	 */
 	public void updateTile(int x, int y, int tileID) {
 		this.map[x][y] = tileID;
+		Graphics2D g = img.createGraphics();
+		drawTileImage(tileID,x,y,g);
+		g.dispose();
 	}
 
 	/**
